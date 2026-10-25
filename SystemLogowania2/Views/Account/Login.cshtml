@@ -1,0 +1,17 @@
+@model LoginVm
+@{ ViewData["Title"] = "Logowanie"; }
+<div class="card narrow">
+  <h1>Logowanie</h1>
+  @if (ViewBag.Info is string info)
+  {
+    <div class="flash error">@info</div>
+  }
+  <div asp-validation-summary="ModelOnly" class="flash error"></div>
+  <form asp-action="Login" method="post">
+    <label asp-for="Username">Login</label>
+    <input asp-for="Username" autocomplete="username" autofocus required />
+    <label asp-for="Password">Hasło</label>
+    <input asp-for="Password" type="password" autocomplete="current-password" required />
+    <button type="submit">Zaloguj</button>
+  </form>
+</div>

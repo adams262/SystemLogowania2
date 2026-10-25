@@ -1,0 +1,46 @@
+@model List<SystemLogowania2.Data.User>
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Użytkownicy";
+    var myId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+}
+<div class="card">
+  <h1>Użytkownicy</h1>
+  <p><a class="btn" asp-action="New">Dodaj użytkownika</a></p>
+  <table>
+    <tr><th>Login</th><th>Rola</th><th>Status</th><th>Hasło</th><th>Akcje</th></tr>
+    @foreach (var u in Model)
+    {
+      <tr>
+        <td>@u.Username @if (u.IsBuiltin) { <span class="badge">stałe</span> }</td>
+        <td>@u.Role</td>
+        <td>@if (u.IsBlocked) { <span class="badge red">zablokowany</span> } else { <text>aktywny</text> }</td>
+        <td class="muted">
+          @if (u.OneTimeExpires != null) { <text>jednorazowe do @u.OneTimeExpires.Value.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</text> }
+          else { <text>zmienione @u.PasswordChangedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</text> }
+        </td>
+        <td>
+          @if (!u.IsBuiltin)
+          {
+            <a class="btn secondary" style="padding:4px 9px;font-size:13px" asp-action="Edit" asp-route-id="@u.Id">Edytuj</a>
+            @if (u.Id != myId)
+            {
+              <form asp-action="Block" asp-route-id="@u.Id" method="post">
+                <button class="secondary" type="submit">@(u.IsBlocked ? "Odblokuj" : "Zablokuj")</button>
+              </form>
+              <form asp-action="Reset" asp-route-id="@u.Id" method="post"
+                    onsubmit="return confirm('Zresetować hasło tego użytkownika?')">
+                <button class="secondary" type="submit">Reset hasła</button>
+              </form>
+              <form asp-action="Delete" asp-route-id="@u.Id" method="post"
+                    onsubmit="return confirm('Usunąć tego użytkownika?')">
+                <button class="danger" type="submit">Usuń</button>
+              </form>
+            }
+          }
+          else { <span class="muted">—</span> }
+        </td>
+      </tr>
+    }
+  </table>
+</div>

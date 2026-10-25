@@ -1,25 +1,24 @@
+using SystemLogowania2.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using SystemLogowania2.Models;
+using SystemLogowania2.Controllers;
 
-namespace SystemLogowania2.Controllers
+namespace SystemLogowania2.Controllers;
+
+public class HomeController : AppController
 {
-    public class HomeController : Controller
-    {
-        public IActionResult Index()
-        {
-            return View();
-        }
+    public IActionResult Index() => View();
+}
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+/// <summary>Demonstracja kontroli uprawnień - miejsce na funkcje modułów 2 i 3.</summary>
+public class ContentController : AppController
+{
+    [Authorize(Policy = Permissions.ContentRead)]
+    public IActionResult Read() => View("Show", Permissions.ContentRead);
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-    }
+    [Authorize(Policy = Permissions.ContentWrite)]
+    public IActionResult Write() => View("Show", Permissions.ContentWrite);
+
+    [Authorize(Policy = Permissions.ContentApprove)]
+    public IActionResult Approve() => View("Show", Permissions.ContentApprove);
 }

@@ -1,0 +1,21 @@
+@model UserFormVm
+@{
+    var isEdit = Model.Id != null;
+    ViewData["Title"] = isEdit ? "Edycja użytkownika" : "Nowy użytkownik";
+}
+<div class="card narrow">
+  <h1>@ViewData["Title"]</h1>
+  <div asp-validation-summary="ModelOnly" class="flash error"></div>
+  <form method="post" asp-action="@(isEdit ? "Edit" : "New")" asp-route-id="@Model.Id">
+    <label asp-for="Username">Login</label>
+    <input asp-for="Username" required />
+    <label asp-for="Role">Rola</label>
+    <select asp-for="Role" asp-items="@(new SelectList(Roles.All))"></select>
+    @if (!isEdit)
+    {
+      <p class="muted">Po zapisaniu zobaczysz hasło jednorazowe (12 znaków, ważne 48 h).</p>
+    }
+    <button type="submit">Zapisz</button>
+    <a class="btn secondary" asp-action="Users">Anuluj</a>
+  </form>
+</div>

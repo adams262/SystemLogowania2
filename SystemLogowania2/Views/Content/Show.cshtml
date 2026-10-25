@@ -1,0 +1,7 @@
+@model string
+@{ ViewData["Title"] = "Treść"; }
+<div class="card">
+  <h1>Dostęp przyznany</h1>
+  <p>Masz uprawnienie <strong>@Permissions.Labels[Model]</strong> (<code>@Model</code>).</p>
+  <p class="muted">Miejsce na funkcje kolejnych modułów.</p>
+</div>

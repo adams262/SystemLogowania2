@@ -1,0 +1,10 @@
+@model OtpVm
+@{ ViewData["Title"] = "Hasło jednorazowe"; }
+<div class="card narrow">
+  <h1>Hasło jednorazowe</h1>
+  <p>Użytkownik: <strong>@Model.Username</strong></p>
+  <p><span class="otp">@Model.Otp</span></p>
+  <p class="muted">Ważne @Model.Hours godzin. Hasło jest widoczne tylko teraz – w bazie przechowywany
+     jest wyłącznie jego hash. Użytkownik musi zmienić je przy pierwszym logowaniu.</p>
+  <a class="btn" asp-action="Users">Wróć do listy</a>
+</div>

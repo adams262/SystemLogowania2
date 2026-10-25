@@ -1,8 +1,23 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@using System.Security.Claims
+@{
+    ViewData["Title"] = "Start";
+    var role = User.FindFirstValue(ClaimTypes.Role);
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="card">
+  <h1>Witaj, @User.Identity!.Name</h1>
+  <p>Twoja rola: <strong>@role</strong></p>
+  <h2>Twoje uprawnienia</h2>
+  <ul>
+    @foreach (var p in Permissions.For(role))
+    {
+      <li>@Permissions.Labels[p] <span class="muted">(@p)</span></li>
+    }
+  </ul>
+</div>
+<div class="card">
+  <h2>Demonstracja kontroli uprawnień</h2>
+  <p class="muted">Każdy link wymaga innego uprawnienia; brak uprawnienia kończy się błędem 403.</p>
+  <a class="btn secondary" asp-controller="Content" asp-action="Read">Przeglądanie</a>
+  <a class="btn secondary" asp-controller="Content" asp-action="Write">Edycja</a>
+  <a class="btn secondary" asp-controller="Content" asp-action="Approve">Zatwierdzanie</a>
 </div>

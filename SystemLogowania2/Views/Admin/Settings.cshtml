@@ -1,0 +1,16 @@
+@model SettingsVm
+@{ ViewData["Title"] = "Ustawienia"; }
+<div class="card narrow" style="max-width:560px">
+  <h1>Ustawienia bezpieczeństwa</h1>
+  <div asp-validation-summary="ModelOnly" class="flash error"></div>
+  <form asp-action="Settings" method="post">
+    <label><input asp-for="PassphraseRule" type="checkbox" />
+      Polityka haseł: fraza hasłowa (co najmniej 3 słowa oddzielone spacją lub myślnikiem)</label>
+    <p class="muted">Minimalna długość hasła (@Passwords.MinLength znaków) obowiązuje zawsze.</p>
+    <label asp-for="PasswordValidityDays">Ważność hasła (dni, 0 = bezterminowo)</label>
+    <input asp-for="PasswordValidityDays" type="number" min="0" max="3650" required />
+    <label asp-for="SessionTimeoutMinutes">Czas bezczynności sesji (minuty)</label>
+    <input asp-for="SessionTimeoutMinutes" type="number" min="1" max="1440" required />
+    <button type="submit">Zapisz</button>
+  </form>
+</div>
