@@ -332,6 +332,11 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
+# Lokalna baza SQLite
+*.db
+*.db-shm
+*.db-wal
+
 # OpenCover UI analysis results
 OpenCover/
 
