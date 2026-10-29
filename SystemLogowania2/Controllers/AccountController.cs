@@ -41,7 +41,7 @@ public class AccountController : AppController
             ok = Passwords.Verify(password, user.PasswordHash, user.Salt);
         else
         {
-            Passwords.Verify(password, Dummy.Hash, Dummy.Salt); // wyrównanie czasu odpowiedzi
+            Passwords.Verify(password, Dummy.Hash, Dummy.Salt); 
             ok = false;
         }
 
@@ -52,8 +52,8 @@ public class AccountController : AppController
             return RedirectToAction("Index", "Home");
         }
 
-        // ten sam komunikat dla złego loginu, hasła, konta zablokowanego i wygasłego hasła jednorazowego
         ModelState.AddModelError("", LoginError);
+
         return View(new LoginVm { Username = vm.Username });
     }
 

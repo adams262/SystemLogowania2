@@ -11,9 +11,9 @@ public class User
     public string Salt { get; set; } = "";
     public string Role { get; set; } = Roles.Reader;
     public bool IsBlocked { get; set; }
-    public bool IsBuiltin { get; set; }          // stałe konto ADMIN
-    public bool MustChange { get; set; } = true; // wymuszona zmiana hasła
-    public DateTime? OneTimeExpires { get; set; } // ważność hasła jednorazowego (UTC)
+    public bool IsBuiltin { get; set; }          
+    public bool MustChange { get; set; } = true; 
+    public DateTime? OneTimeExpires { get; set; } 
     public DateTime PasswordChangedAt { get; set; }
     public DateTime CreatedAt { get; set; }
 }
@@ -27,12 +27,12 @@ public class PasswordHistory
     public DateTime CreatedAt { get; set; }
 }
 
-/// <summary>Ustawienia ustawiane przez administratora (jeden wiersz).</summary>
+
 public class SecuritySettings
 {
     public int Id { get; set; }
-    public bool PassphraseRule { get; set; }          // polityka haseł z wariantu
-    public int PasswordValidityDays { get; set; } = 90; // 0 = bezterminowo
+    public bool PassphraseRule { get; set; }          
+    public int PasswordValidityDays { get; set; } = 90; 
     public int SessionTimeoutMinutes { get; set; } = 15;
 }
 

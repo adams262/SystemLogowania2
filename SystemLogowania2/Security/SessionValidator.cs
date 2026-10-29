@@ -6,11 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace SystemLogowania2.Security;
 
-/// <summary>
-/// Sprawdzane przy KAŻDYM żądaniu: czy konto istnieje i nie jest zablokowane, czy sesja
-/// nie przekroczyła czasu bezczynności (ustawianego przez admina w bazie) oraz odświeżenie
-/// roli i znacznika ostatniej aktywności.
-/// </summary>
+
 public static class SessionValidator
 {
     public const string LastClaim = "last";
@@ -51,7 +47,7 @@ public static class SessionValidator
 
         ctx.HttpContext.Items["user"] = user;
         ctx.HttpContext.Items["settings"] = settings;
-        ctx.ReplacePrincipal(new ClaimsPrincipal(CreateIdentity(user))); // nowy znacznik "last"
+        ctx.ReplacePrincipal(new ClaimsPrincipal(CreateIdentity(user))); 
         ctx.ShouldRenew = true;
     }
 }

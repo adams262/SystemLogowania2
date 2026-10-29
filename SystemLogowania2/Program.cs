@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDb>(o =>
     o.UseSqlite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=app.db"));
 builder.Services.AddScoped<UserService>();
 
-// CSRF: token sprawdzany we wszystkich żądaniach POST
+
 builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -24,16 +24,16 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         o.Cookie.Name = "auth";
         o.Cookie.HttpOnly = true;
         o.Cookie.SameSite = SameSiteMode.Lax;
-        o.ExpireTimeSpan = TimeSpan.FromHours(12);  // górna granica; właściwy limit to czas bezczynności
+        o.ExpireTimeSpan = TimeSpan.FromHours(12);  
         o.SlidingExpiration = false;
         o.Events.OnValidatePrincipal = SessionValidator.ValidateAsync;
     });
 
 builder.Services.AddAuthorization(o =>
 {
-    // domyślnie każdy adres wymaga zalogowania ([AllowAnonymous] tylko na logowaniu)
+    
     o.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-    // jedna polityka na uprawnienie
+    
     foreach (var perm in Permissions.All)
         o.AddPolicy(perm, p => p.RequireAuthenticatedUser()
             .RequireAssertion(ctx => Permissions.Has(ctx.User.FindFirstValue(ClaimTypes.Role), perm)));
@@ -41,7 +41,7 @@ builder.Services.AddAuthorization(o =>
 
 var app = builder.Build();
 
-// --- inicjalizacja bazy, konto ADMIN, opcjonalnie konta testowe ---
+
 using (var scope = app.Services.CreateScope())
 {
     scope.ServiceProvider.GetRequiredService<AppDb>().Database.EnsureCreated();
@@ -57,7 +57,7 @@ using (var scope = app.Services.CreateScope())
 
     if (args.Contains("--seed-test-users"))
     {
-        // 7 użytkowników testowych wariantu 6
+        
         var test = new (string Name, string Role)[]
         {
             ("test1", Roles.Administrator), ("test2", Roles.Manager), ("test3", Roles.Manager),
@@ -76,7 +76,7 @@ using (var scope = app.Services.CreateScope())
 app.UseStaticFiles();
 app.UseAuthentication();
 
-// Wymuszona zmiana hasła: do czasu zmiany wszystkie adresy prowadzą na /Account/ChangePassword
+
 app.Use(async (ctx, next) =>
 {
     if (ctx.Items["user"] is User u && ctx.Items["settings"] is SecuritySettings s

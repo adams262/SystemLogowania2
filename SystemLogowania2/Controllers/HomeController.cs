@@ -10,7 +10,7 @@ public class HomeController : AppController
     public IActionResult Index() => View();
 }
 
-/// <summary>Demonstracja kontroli uprawnień - miejsce na funkcje modułów 2 i 3.</summary>
+
 public class ContentController : AppController
 {
     [Authorize(Policy = Permissions.ContentRead)]

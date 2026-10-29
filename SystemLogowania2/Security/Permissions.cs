@@ -1,6 +1,6 @@
 namespace SystemLogowania2.Security;
 
-/// <summary>Role z wariantu 6.</summary>
+
 public static class Roles
 {
     public const string Administrator = "Administrator";
@@ -11,10 +11,7 @@ public static class Roles
     public static readonly string[] All = { Administrator, Manager, Editor, Reader };
 }
 
-/// <summary>
-/// Warstwa uprawnień. Kod aplikacji sprawdza UPRAWNIENIA (polityki autoryzacji),
-/// nigdy nazwy ról - nowe moduły dopisują uprawnienia tylko tutaj.
-/// </summary>
+
 public static class Permissions
 {
     public const string UsersManage = "users.manage";

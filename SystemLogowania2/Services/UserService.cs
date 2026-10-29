@@ -10,7 +10,7 @@ public class UserService
 
     public Task<User?> GetAsync(int id) => _db.Users.FirstOrDefaultAsync(u => u.Id == id);
 
-    // kolumna Username ma collation NOCASE, więc porównanie nie rozróżnia wielkości liter
+    
     public Task<User?> FindByNameAsync(string name) =>
         _db.Users.FirstOrDefaultAsync(u => u.Username == name);
 
@@ -28,7 +28,7 @@ public class UserService
         return s;
     }
 
-    /// <summary>Tworzy konto z hasłem jednorazowym (ważne 48 h). Zwraca konto i jawne hasło.</summary>
+    
     public async Task<(User User, string Otp)> CreateAsync(
         string username, string role, bool builtin = false, string? otp = null)
     {
@@ -65,7 +65,7 @@ public class UserService
 
     public static bool NeedsChange(User u, SecuritySettings s) => u.MustChange || PasswordExpired(u, s);
 
-    /// <summary>Nowe hasło musi różnić się od bieżącego i wszystkich poprzednich.</summary>
+    
     public async Task<bool> IsReusedAsync(User user, string newPassword)
     {
         if (Passwords.Verify(newPassword, user.PasswordHash, user.Salt)) return true;

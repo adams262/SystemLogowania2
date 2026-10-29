@@ -144,7 +144,7 @@ public class AdminController : AppController
         return RedirectToAction(nameof(Settings));
     }
 
-    /// <summary>Konta ADMIN i własnego konta nie wolno blokować, usuwać ani resetować.</summary>
+    
     private async Task<User?> Guard(int id)
     {
         var user = await _users.GetAsync(id);
