@@ -19,6 +19,7 @@
     <a asp-controller="Home" asp-action="Index">Start</a>
     @if (Permissions.Has(role, Permissions.UsersManage))
     {
+      <a asp-controller="Admin" asp-action="Alerts">Alerty</a>
       <a asp-controller="Admin" asp-action="Users">Użytkownicy</a>
     }
     @if (Permissions.Has(role, Permissions.SettingsManage))

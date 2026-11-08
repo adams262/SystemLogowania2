@@ -16,6 +16,9 @@ public class User
     public DateTime? OneTimeExpires { get; set; } 
     public DateTime PasswordChangedAt { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int FailedAttempts { get; set; }      
+    public DateTime? LockedUntil { get; set; }   
+    public bool IsCanary { get; set; }
 }
 
 public class PasswordHistory
@@ -34,7 +37,11 @@ public class SecuritySettings
     public bool PassphraseRule { get; set; }          
     public int PasswordValidityDays { get; set; } = 90; 
     public int SessionTimeoutMinutes { get; set; } = 15;
+    public int MaxFailedAttempts { get; set; } = 5;   
+    public int IpMaxAttempts { get; set; } = 10;
 }
+
+
 
 public class AppDb : DbContext
 {
@@ -52,4 +59,23 @@ public class AppDb : DbContext
             .HasOne<User>().WithMany().HasForeignKey(h => h.UserId)
             .OnDelete(DeleteBehavior.Cascade);
     }
+
+    public DbSet<LoginAttempt> LoginAttempts => Set<LoginAttempt>();
+    public DbSet<SecurityEvent> SecurityEvents => Set<SecurityEvent>();
+}
+
+public class LoginAttempt      
+{
+    public int Id { get; set; }
+    public string Ip { get; set; } = "";
+    public DateTime At { get; set; }
+}
+
+public class SecurityEvent     
+{
+    public int Id { get; set; }
+    public DateTime At { get; set; }
+    public string Type { get; set; } = "";
+    public string Ip { get; set; } = "";
+    public string Details { get; set; } = "";
 }

@@ -84,6 +84,11 @@ public class AdminController : AppController
         if (user != null)
         {
             user.IsBlocked = !user.IsBlocked;
+            if (!user.IsBlocked)            // odblokowanie zdejmuje też blokadę czasową
+            {
+                user.LockedUntil = null;
+                user.FailedAttempts = 0;
+            }
             await _users.SaveAsync();
             TempData["ok"] = user.IsBlocked ? "Konto zablokowane." : "Konto odblokowane.";
         }
@@ -123,6 +128,8 @@ public class AdminController : AppController
             PassphraseRule = s.PassphraseRule,
             PasswordValidityDays = s.PasswordValidityDays,
             SessionTimeoutMinutes = s.SessionTimeoutMinutes,
+            MaxFailedAttempts = s.MaxFailedAttempts,
+            IpMaxAttempts = s.IpMaxAttempts,
         });
     }
 
@@ -130,21 +137,28 @@ public class AdminController : AppController
     [HttpPost]
     public async Task<IActionResult> Settings(SettingsVm vm)
     {
-        if (vm.PasswordValidityDays is < 0 or > 3650 || vm.SessionTimeoutMinutes is < 1 or > 1440)
+        if (vm.PasswordValidityDays is < 0 or > 3650 || vm.SessionTimeoutMinutes is < 1 or > 1440
+            || vm.MaxFailedAttempts is < 1 or > 100 || vm.IpMaxAttempts is < 1 or > 1000)
         {
-            ModelState.AddModelError("", "Ważność hasła: 0-3650 dni (0 = bezterminowo); czas bezczynności: 1-1440 minut.");
+            ModelState.AddModelError("", "Ważność hasła: 0-3650 dni (0 = bezterminowo); bezczynność: 1-1440 minut; " +
+                "błędne logowania do blokady konta: 1-100; limit prób z jednego IP: 1-1000.");
             return View(vm);
         }
         var s = await _users.GetSettingsAsync();
         s.PassphraseRule = vm.PassphraseRule;
         s.PasswordValidityDays = vm.PasswordValidityDays;
         s.SessionTimeoutMinutes = vm.SessionTimeoutMinutes;
+        s.MaxFailedAttempts = vm.MaxFailedAttempts;
+        s.IpMaxAttempts = vm.IpMaxAttempts;
         await _users.SaveAsync();
         TempData["ok"] = "Ustawienia zapisane.";
         return RedirectToAction(nameof(Settings));
     }
 
-    
+    [Authorize(Policy = Permissions.UsersManage)]
+    public async Task<IActionResult> Alerts([FromServices] LoginGuard guard) =>
+        View(await guard.RecentAsync());
+
     private async Task<User?> Guard(int id)
     {
         var user = await _users.GetAsync(id);

@@ -11,6 +11,10 @@
     <input asp-for="PasswordValidityDays" type="number" min="0" max="3650" required />
     <label asp-for="SessionTimeoutMinutes">Czas bezczynności sesji (minuty)</label>
     <input asp-for="SessionTimeoutMinutes" type="number" min="1" max="1440" required />
+        <label asp-for="MaxFailedAttempts">Błędnych logowań do blokady konta (na 15 min)</label>
+        <input asp-for="MaxFailedAttempts" type="number" min="1" max="100" required />
+        <label asp-for="IpMaxAttempts">Limit nieudanych prób z jednego adresu IP (na 15 min)</label>
+        <input asp-for="IpMaxAttempts" type="number" min="1" max="1000" required />
     <button type="submit">Zapisz</button>
   </form>
 </div>

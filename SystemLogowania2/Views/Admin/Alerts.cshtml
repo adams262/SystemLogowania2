@@ -1,0 +1,14 @@
+﻿@model List<SystemLogowania2.Data.SecurityEvent>
+@{
+    ViewData["Title"] = "Alerty";
+}
+<div class="card">
+    <h1>Alerty bezpieczeństwa</h1>
+    <table>
+        <tr><th>Czas</th><th>Typ</th><th>IP</th><th>Szczegóły</th></tr>
+        @foreach (var e in Model)
+        {
+            <tr><td>@e.At.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss")</td><td>@e.Type</td><td>@e.Ip</td><td>@e.Details</td></tr>
+        }
+    </table>
+</div>

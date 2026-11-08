@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDb>(o =>
     o.UseSqlite(builder.Configuration.GetConnectionString("Default") ?? "Data Source=app.db"));
 builder.Services.AddScoped<UserService>();
+builder.Services.AddHttpClient<TurnstileService>();
+builder.Services.AddScoped<LoginGuard>();
 
 
 builder.Services.AddControllersWithViews(o => o.Filters.Add(new AutoValidateAntiforgeryTokenAttribute()));
@@ -53,6 +55,14 @@ using (var scope = app.Services.CreateScope())
         var (_, otp) = await users.CreateAsync("ADMIN", Roles.Administrator, builtin: true,
             otp: builder.Configuration["AdminInitialPassword"]);
         Console.WriteLine($"\n*** Utworzono konto ADMIN. Hasło jednorazowe (48 h): {otp}\n");
+    }
+
+    if (await users.FindByNameAsync("admin.backup") == null)
+    {
+        var (canary, _) = await users.CreateAsync("admin.backup", Roles.Administrator,
+            otp: Guid.NewGuid().ToString("N") + "!Aa1");   
+        canary.IsCanary = true;
+        await users.SaveAsync();
     }
 
     if (args.Contains("--seed-test-users"))

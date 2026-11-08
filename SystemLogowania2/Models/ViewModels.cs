@@ -4,6 +4,7 @@ public class LoginVm
 {
     public string? Username { get; set; }
     public string? Password { get; set; }
+    public string? Website { get; set; }
 }
 
 public class ChangePasswordVm
@@ -34,4 +35,6 @@ public class SettingsVm
     public bool PassphraseRule { get; set; }
     public int PasswordValidityDays { get; set; }
     public int SessionTimeoutMinutes { get; set; }
+    public int MaxFailedAttempts { get; set; }
+    public int IpMaxAttempts { get; set; }
 }
